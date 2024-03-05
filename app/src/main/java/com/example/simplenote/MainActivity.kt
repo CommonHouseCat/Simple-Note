@@ -1,37 +1,41 @@
 package com.example.simplenote
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import com.example.simplenote.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var nextButton:Button
+
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Reference the toolbar XML file
-        val toolbar:Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(binding.toolbar)
 
-        // Set the toolbar as the app bar for the activity
-        setSupportActionBar(toolbar)
-
-        // Set the title and logo for this activity
-        supportActionBar?.title = " Note";
-        toolbar.setLogo(R.drawable.ic_add_new_note)
-
-        //
-        nextButton = findViewById(R.id.button)
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.add_note -> {
+                    startActivity(Intent(this, AddNoteActivity::class.java))
+                    true // Return true to indicate that the event has been consumed
+                }
+                else -> false // Return false for other menu items
+            }
+        }
 
 
     }
 
-    fun goToNoteActivity(view: View) {
-        val intent = Intent(this, Note_Activity::class.java)
-        startActivity(intent)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 
 }
