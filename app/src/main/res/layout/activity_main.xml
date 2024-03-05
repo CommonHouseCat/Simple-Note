@@ -7,15 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-  <androidx.appcompat.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/orange"
-      app:title="@string/Note"
-      app:titleMarginStart="30dp"
-      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      android:layout_alignParentTop="true"
-      />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange"
+        app:title="@string/Note"
+        app:titleMarginStart="30dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_alignParentTop="true"/>
 
-  </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notesRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="0dp"
+        android:padding="16dp" />
+
+
+</RelativeLayout>

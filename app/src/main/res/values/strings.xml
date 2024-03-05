@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Simple Note</string>
     <string name="Add_note">Add note</string>
-    <string name="Note">Note</string>
+    <string name="Note">Notes.</string>
     <string name="AddNote">Add Note.</string>
     <string name="EnterNoteTitle">Enter note title</string>
     <string name="EnterNoteDescription">Enter Note Description…</string>
     <string name="CheckImageContentDescriptionNote">Create New Note</string>
+    <string name="titleTextView">Title</string>
+    <string name="contentTextView">Content</string>
 </resources>
