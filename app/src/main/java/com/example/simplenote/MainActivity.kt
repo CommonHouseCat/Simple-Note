@@ -1,18 +1,19 @@
 package com.example.simplenote
 
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.Menu
-import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplenote.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var db: NoteDBHelper
+    private lateinit var notesAdapter: NotesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,6 +31,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        db = NoteDBHelper(this)
+        notesAdapter = NotesAdapter(db.getAllNotes(), this)
+
+        binding.notesRecycleView.layoutManager = LinearLayoutManager(this)
+        binding.notesRecycleView.adapter = notesAdapter
 
     }
 
@@ -38,4 +44,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        notesAdapter.refreshData(db.getAllNotes())
+    }
 }

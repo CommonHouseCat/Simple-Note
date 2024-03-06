@@ -8,4 +8,5 @@
     <string name="CheckImageContentDescriptionNote">Create New Note</string>
     <string name="titleTextView">Title</string>
     <string name="contentTextView">Content</string>
+    <string name="editNote">Edit Note</string>
 </resources>
