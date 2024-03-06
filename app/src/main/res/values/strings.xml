@@ -9,4 +9,5 @@
     <string name="titleTextView">Title</string>
     <string name="contentTextView">Content</string>
     <string name="editNote">Edit Note</string>
+    <string name="deleteNote">Delete Note</string>
 </resources>

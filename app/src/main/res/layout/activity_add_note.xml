@@ -46,7 +46,7 @@
         android:fontFamily="@font/poppins"
         android:inputType="text"
         android:importantForAutofill="no" />
-    
+
     <EditText
         android:id="@+id/contentEditText"
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
         android:background="@drawable/orange_border"
         android:layout_below="@id/titleEditText"
         android:layout_marginTop="12dp"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:importantForAutofill="no" />
 
 </RelativeLayout>

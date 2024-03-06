@@ -15,7 +15,7 @@
         android:padding="16dp">
 
         <RelativeLayout
-            android:layout_width="366dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
@@ -36,9 +36,18 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="2dp"
+                android:layout_marginEnd="30dp"
                 android:contentDescription="@string/editNote"
                 android:src="@drawable/ic_edit" />
+
+            <ImageView
+                android:id="@+id/deleteButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="@string/deleteNote"/>
+
         </RelativeLayout>
 
         <TextView
