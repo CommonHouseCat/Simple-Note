@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Simple Note</string>
     <string name="Add_note">Add note</string>
-    <string name="Note">Notes.</string>
+    <string name="Note">Notes</string>
+    <string name="Checklist">Checklist</string>
+    <string name="Reminder">Reminder</string>
+    <string name="ProgressChecker">Progress Tracker</string>
+    <string name="Settings">Settings</string>
     <string name="AddNote">Add Note.</string>
     <string name="EnterNoteTitle">Enter note title</string>
     <string name="EnterNoteDescription">Enter Note Description…</string>
@@ -10,4 +14,7 @@
     <string name="contentTextView">Content</string>
     <string name="editNote">Edit Note</string>
     <string name="deleteNote">Delete Note</string>
+    <string name="AppImage">App Image</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
 </resources>

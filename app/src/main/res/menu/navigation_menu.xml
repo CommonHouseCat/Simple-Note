@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_note"
+            android:icon="@drawable/ic_note"
+            android:title="@string/Note"/>
+
+        <item
+            android:id="@+id/nav_checklist"
+            android:icon="@drawable/ic_checklist"
+            android:title="@string/Checklist"/>
+
+        <item
+            android:id="@+id/nav_reminder"
+            android:icon="@drawable/ic_reminders"
+            android:title="@string/Reminder"/>
+
+        <item
+            android:id="@+id/nav_progress_tracker"
+            android:icon="@drawable/ic_progress_tracker"
+            android:title="@string/ProgressChecker"/>
+
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_setting"
+            android:title="@string/Settings"/>
+    </group>
+
+</menu>
