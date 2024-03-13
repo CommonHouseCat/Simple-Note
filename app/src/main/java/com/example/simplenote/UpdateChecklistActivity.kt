@@ -3,9 +3,9 @@ package com.example.simplenote
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-class SettingActivity : AppCompatActivity() {
+class UpdateChecklistActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.activity_update_checklist)
     }
 }

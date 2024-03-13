@@ -35,7 +35,7 @@ class NotesAdapter(private var notes: List<NoteDT>, context: Context) : Recycler
 
         // Truncate title to 4 letters followed by an ellipsis
         val truncatedTitle = if (note.title.length > 24){
-            note.title.substring(0, minOf(25,note.title.length)) + "..."
+            note.title.substring(0, minOf(23,note.title.length)) + "..."
         } else {
             note.title
         }

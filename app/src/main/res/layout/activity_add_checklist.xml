@@ -3,62 +3,66 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/AddNoteActivity"
+    android:id="@+id/AddChecklistActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".UpdateNoteActivity">
+    tools:context=".AddChecklistActivity">
 
     <TextView
-        android:id="@+id/editNoteHeading"
+        android:id="@+id/addChecklistHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="17dp"
         android:fontFamily="@font/poppins"
-        android:text="@string/Add_note"
+        android:text="@string/Edit_checklist"
         android:textColor="@color/orange"
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/updateSaveButton"
+        android:id="@+id/saveChecklistButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_check"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@id/editNoteHeading"
+        android:layout_alignTop="@id/addChecklistHeading"
         android:layout_marginEnd="6dp"
         android:contentDescription="@string/CheckImageContentDescriptionNote"/>
 
     <EditText
-        android:id="@+id/updateTitleEditText"
+        android:id="@+id/titleChecklistEditText"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:hint="@string/EnterNoteTitle"
         android:padding="12dp"
         android:textSize="20sp"
-        android:layout_below="@id/editNoteHeading"
-        android:background="@drawable/orange_border"
+        android:layout_below="@id/addChecklistHeading"
         android:layout_marginTop="16dp"
         android:maxLines="1"
         android:fontFamily="@font/poppins"
         android:inputType="text"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        android:backgroundTint="@color/orange"/>
 
-    <EditText
-        android:id="@+id/updateContentEditText"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/addChecklistRecycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/EnterNoteDescription"
-        android:gravity="top"
-        android:padding="12dp"
-        android:textSize="18sp"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/orange_border"
-        android:layout_below="@id/updateTitleEditText"
-        android:layout_marginTop="12dp"
-        android:inputType="textMultiLine"
-        android:importantForAutofill="no" />
+        android:layout_below="@id/titleChecklistEditText"
+        android:layout_marginTop="10dp"
+        android:padding="12dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addChecklistItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        android:backgroundTint="@color/orange"
+        android:contentDescription="@string/AddChecklistItemButton"/>
 
 </RelativeLayout>

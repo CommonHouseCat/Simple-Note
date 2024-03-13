@@ -8,8 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".AddNoteActivity"
-    >
+    tools:context=".AddNoteActivity">
 
     <TextView
         android:id="@+id/addNoteHeading"
@@ -18,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="17dp"
         android:fontFamily="@font/poppins"
-        android:text="@string/Add_note"
+        android:text="@string/Edit_note"
         android:textColor="@color/orange"
         android:textSize="24sp" />
 

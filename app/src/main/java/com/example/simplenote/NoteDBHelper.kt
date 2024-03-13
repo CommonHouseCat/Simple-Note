@@ -9,24 +9,49 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     companion object{
         private const val DATABASE_NAME = "simplenote.db"
         private const val DATABASE_VERSION = 1
+        //Table for notes
         private const val TABLE_NAME = "notes"
         private const val COLUMN_ID = "id"
         private const val COLUMN_TITLE = "title"
         private const val COLUMN_CONTENT = "content"
-
+        //Table for checklists
+        private const val TABLE_NAME_CHECKLIST = "checklists"
+        private const val COLUMN_ID_CHECKLIST = "checklistID"
+        private const val COLUMN_TITLE_CHECKLIST = "checklistTitle"
+        //Table for checklist item
+        private const val TABLE_NAME_CHECKLIST_ITEM = "checklistsItem"
+        private const val COLUMN_ID_CHECKLIST_ITEM = "itemID"
+        private const val COLUMN_CONTENT_CHECKLIST_ITEM = "itemContent"
+        private const val COLUMN_IS_CHECKED = "isChecked"
+        private const val COLUMN_CHECKLIST_FOREIGN_KEY = "fkID"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
         db?.execSQL(createTableQuery)
+
+        val createChecklistTableQuery = "CREATE TABLE $TABLE_NAME_CHECKLIST ($COLUMN_ID_CHECKLIST INTEGER PRIMARY KEY, $COLUMN_TITLE_CHECKLIST TEXT)"
+        db?.execSQL(createChecklistTableQuery)
+
+        val createChecklistItemTableQuery = "CREATE TABLE $TABLE_NAME_CHECKLIST_ITEM ($COLUMN_ID_CHECKLIST_ITEM INTEGER PRIMARY KEY, $COLUMN_CONTENT_CHECKLIST_ITEM TEXT, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, $COLUMN_CHECKLIST_FOREIGN_KEY INTEGER, FOREIGN KEY($COLUMN_CHECKLIST_FOREIGN_KEY) REFERENCES $TABLE_NAME_CHECKLIST ($COLUMN_ID_CHECKLIST) ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT fk_checklist_id FOREIGN KEY($COLUMN_CHECKLIST_FOREIGN_KEY) REFERENCES $TABLE_NAME_CHECKLIST($COLUMN_ID_CHECKLIST))"
+        db?.execSQL(createChecklistItemTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dropTableQuery = "DROP TABLE IF EXISTS $TABLE_NAME"
         db?.execSQL(dropTableQuery)
+
+        val dropChecklistTableQuery = "DROP TABLE IF EXISTS $TABLE_NAME_CHECKLIST"
+        db?.execSQL(dropChecklistTableQuery)
+
+        val dropChecklistItemTableQuery = "DROP TABLE IF EXISTS $TABLE_NAME_CHECKLIST_ITEM"
+        db?.execSQL(dropChecklistItemTableQuery)
+
         onCreate(db)
     }
 
+
+    // This portion is for the Note
     fun insertNote(noteDT: NoteDT){
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -90,5 +115,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.delete(TABLE_NAME, whereClause, whereArgs)
         db.close()
     }
+
+    // This portion is for checklist
 
 }

@@ -55,8 +55,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId){
                 R.id.nav_note -> {
@@ -104,6 +102,4 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         notesAdapter.refreshData(db.getAllNotes())
     }
-
-
 }
