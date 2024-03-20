@@ -4,4 +4,4 @@ data class NoteDT(val id: Int, val title: String, val content: String)
 
 data class ChecklistDC(val checklistID: Int, val checklistTitle: String)
 
-data class ChecklistItemDC(val itemID: Int, val itemContent: String, val isChecked: Boolean, val fkID: Int)
+data class ChecklistItemDC(val itemID: Int, val checklistIDfk: Int, val itemContent: String, val isChecked: Boolean)

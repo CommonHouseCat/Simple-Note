@@ -35,7 +35,7 @@
         android:id="@+id/titleChecklistEditText"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:hint="@string/EnterNoteTitle"
+        android:hint="@string/EnterChecklistTitle"
         android:padding="12dp"
         android:textSize="20sp"
         android:layout_below="@id/addChecklistHeading"

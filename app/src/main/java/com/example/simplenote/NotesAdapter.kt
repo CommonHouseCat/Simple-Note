@@ -2,6 +2,7 @@ package com.example.simplenote
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ class NotesAdapter(private var notes: List<NoteDT>, context: Context) : Recycler
 
     fun refreshData(newNotes: List<NoteDT>){
         notes = newNotes
+        Log.d("TAG", "Refresh Data")
         notifyDataSetChanged()
     }
 }

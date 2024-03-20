@@ -30,7 +30,7 @@
                 android:paddingTop="2dp"/>
 
             <TextView
-                android:id="@+id/titleChecklistItemTextView"
+                android:id="@+id/contentChecklistItemTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
