@@ -2,9 +2,12 @@ package com.example.simplenote
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 
 
 class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -30,7 +33,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
-        val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT)"
+        val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT UNIQUE)"
         val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
 
         db?.execSQL(createTableQuery)
@@ -53,7 +56,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
 
-    // This portion is for the Note ----------------------------------------------------------------
+    // This portion is for the Note ----------------------------------------------------------------------------------------------------------------------------
     fun insertNote(noteDT: NoteDT){
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -118,14 +121,19 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.close()
     }
 
-    // This portion is for checklist ---------------------------------------------------------------
+    // This portion is for checklist ---------------------------------------------------------------------------------------------------------------------------
+    // insertChecklist has been modified, if cause error, remove the try-catch block
     fun insertChecklist(checklistDC: ChecklistDC){
         val db = writableDatabase
-        val values = ContentValues().apply {
-            put(COLUMN_CHECKLIST_TITLE, checklistDC.checklistTitle)
+        try{
+            val values = ContentValues().apply {
+                put(COLUMN_CHECKLIST_TITLE, checklistDC.checklistTitle)
+            }
+            db.insert(TABLE_CHECKLIST_NAME, null, values)
+            db.close()
+        } catch (e: SQLiteConstraintException){
+            Log.d("TAG", "Duplicate Checklist Title")
         }
-        db.insert(TABLE_CHECKLIST_NAME, null, values)
-        db.close()
     }
 
     fun getAllChecklists(): List<ChecklistDC>{
@@ -173,7 +181,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     fun deleteChecklist(checklistID: Int){
         val db = writableDatabase
-            // Delete from Item table, could be a future problem here!!!
+            // Delete from Item table
             val whereClauseItems = "$COLUMN_CHECKLIST_ID_FK = ?"
             val whereArgsItems = arrayOf(checklistID.toString())
             db.delete(TABLE_CHECKLIST_ITEM_NAME, whereClauseItems, whereArgsItems)
@@ -188,35 +196,31 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
 
 
-    // This portion is for checklist Items --------------------------------------------------------
-    fun insertChecklistItem(checklistItemDC: ChecklistItemDC){
+    // This portion is for checklist Items --------------------------------------------------------------------------------------------------------------------
+    // Vanilla could be enough
+    fun insertChecklistItem(checklistItemDC: ChecklistItemDC, currentChecklistID: Int){
         val db = writableDatabase
         val values = ContentValues().apply{
-            put(COLUMN_CHECKLIST_ID_FK, checklistItemDC.checklistIDfk)
-            put(COLUMN_CONTENT, checklistItemDC.itemContent)
+            put(COLUMN_CHECKLIST_ID_FK, currentChecklistID)
+            put(COLUMN_ITEM_CONTENT, checklistItemDC.itemContent)
+            put(COLUMN_IS_CHECKED, checklistItemDC.isChecked)
         }
         db.insert(TABLE_CHECKLIST_ITEM_NAME, null, values)
         db.close()
     }
 
-    // Get the currently editing checklist ID for the checklist Item (Use in AddChecklistActivity)
-    fun getCurrentChecklistID(): Int{
+    // Get the currently editing checklist ID through title
+    fun getCurrentChecklistID(checklistTitle: String): Int{
         val db = writableDatabase
-        var checklistID = -1
-
-        val query = "SELECT MAX($COLUMN_CHECKLIST_ID) FROM $TABLE_CHECKLIST_NAME"
+        var currentChecklistID = -1
+        val query = "SELECT * FROM $TABLE_CHECKLIST_NAME WHERE $COLUMN_CHECKLIST_TITLE = '$checklistTitle'" // single quote for strings, without means column name
         val cursor = db.rawQuery(query, null)
+        cursor.moveToFirst()
 
-        cursor.use { c ->
-            while (c.moveToNext()) {
-                // Retrieve the checklist ID from the cursor
-                checklistID = cursor.getInt(0)
-            }
-        }
+        currentChecklistID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CHECKLIST_ID))
         cursor.close()
         db.close()
-
-        return checklistID
+        return currentChecklistID
     }
 
     fun getAllChecklistsItem(currentChecklistID: Int): List<ChecklistItemDC>{
@@ -240,6 +244,12 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return checklistItemList
     }
 
-
+    fun deleteChecklistItem(checklistItemID: Int){
+        val db = writableDatabase
+        val whereClauseItems = "$COLUMN_ITEM_ID = ?"
+        val whereArgsItems = arrayOf(checklistItemID.toString())
+        db.delete(TABLE_CHECKLIST_ITEM_NAME, whereClauseItems, whereArgsItems)
+        db.close()
+    }
 
 }

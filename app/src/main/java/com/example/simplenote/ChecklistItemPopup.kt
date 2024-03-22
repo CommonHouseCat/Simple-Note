@@ -33,9 +33,8 @@ class ChecklistItemPopup(private val currentChecklistID: Int) : DialogFragment()
         binding.buttonConfirm.setOnClickListener{
             val itemContent = binding.editTextChecklistItem.text.toString()
             val checklistItemA = ChecklistItemDC(0, currentChecklistID, itemContent, false)
-            db.insertChecklistItem(checklistItemA)
+            db.insertChecklistItem(checklistItemA, currentChecklistID)
             dismiss()
-
         }
 
         binding.buttonCancel.setOnClickListener{

@@ -13,9 +13,7 @@
         android:theme="@style/Theme.SimpleNote"
         tools:targetApi="31">
 
-        <activity
-            android:name=".UpdateChecklistActivity"
-            android:exported="false" />
+
         <activity
             android:name=".AddChecklistActivity"
             android:exported="false" />

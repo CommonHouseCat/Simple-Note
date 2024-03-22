@@ -37,7 +37,6 @@ class CreateChecklistPopup : DialogFragment() {
             dismiss()
         }
 
-
         binding.buttonCancelMenu.setOnClickListener{
             dismiss()
         }

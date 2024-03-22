@@ -3,6 +3,7 @@ package com.example.simplenote
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplenote.databinding.ActivityAddChecklistBinding
 
@@ -19,16 +20,13 @@ class AddChecklistActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = NoteDBHelper(this)
-        val currentChecklistID = db.getCurrentChecklistID()
-        checklistItemAdapter = ChecklistItemAdapter(db.getAllChecklistsItem(currentChecklistID), this)
 
-        // Edit button function here
+        // Update Checklist Button
         checklistId = intent.getIntExtra("checklistID", -1)
         if(checklistId == -1){
             finish()
             return
         }
-
         val checklist = db.getChecklistByID(checklistId)
         binding.titleChecklistEditText.setText(checklist.checklistTitle)
 
@@ -39,27 +37,33 @@ class AddChecklistActivity : AppCompatActivity() {
             finish()
             Toast.makeText(this, "Checklist Updated", Toast.LENGTH_SHORT).show()
         }
-        //-----------------------------------------------------------------------
-        binding.addChecklistRecycleView.layoutManager = LinearLayoutManager(this)
-        binding.addChecklistRecycleView.adapter = checklistItemAdapter
 
-
+        // Checklist Items related
+        // Add Item button
+        val title = checklist.checklistTitle
         binding.addChecklistItemButton.setOnClickListener{
-            showChecklistItemPopup()
+            showChecklistItemPopup(title)
         }
 
+        // Checklist Item RecycleView
+        val currentChecklistID = db.getCurrentChecklistID(title)
+        checklistItemAdapter = ChecklistItemAdapter(db.getAllChecklistsItem(currentChecklistID), this)
+        binding.addChecklistRecycleView.layoutManager = LinearLayoutManager(this)
+        binding.addChecklistRecycleView.adapter = checklistItemAdapter
 
     }
 
     override fun onResume() {
         super.onResume()
-        val currentChecklistID = db.getCurrentChecklistID()
+        val checklist = db.getChecklistByID(checklistId)
+        val title = checklist.checklistTitle
+        val currentChecklistID = db.getCurrentChecklistID(title)
         checklistItemAdapter.refreshData(db.getAllChecklistsItem(currentChecklistID))
     }
 
-    private fun showChecklistItemPopup(){
+    private fun showChecklistItemPopup(title: String){
         val fragmentManager = supportFragmentManager
-        val currentChecklistID = db.getCurrentChecklistID()
+        val currentChecklistID = db.getCurrentChecklistID(title)
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = ChecklistItemPopup(currentChecklistID)
         fragmentTransaction.add(fragment, "ChecklistItemPopup")
