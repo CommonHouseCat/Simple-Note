@@ -244,11 +244,33 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return checklistItemList
     }
 
+    fun updateChecklistItem(itemId: Int, newContent: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_ITEM_CONTENT, newContent)
+        }
+        val whereClause = "$COLUMN_ITEM_ID = ?"
+        val whereArgs = arrayOf(itemId.toString())
+        db.update(TABLE_CHECKLIST_ITEM_NAME, values, whereClause, whereArgs)
+        db.close()
+    }
+
     fun deleteChecklistItem(checklistItemID: Int){
         val db = writableDatabase
         val whereClauseItems = "$COLUMN_ITEM_ID = ?"
         val whereArgsItems = arrayOf(checklistItemID.toString())
         db.delete(TABLE_CHECKLIST_ITEM_NAME, whereClauseItems, whereArgsItems)
+        db.close()
+    }
+
+    fun updateCheckboxState(itemId: Int, isChecked: Boolean){
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_IS_CHECKED, if(isChecked) 1 else 0)
+        }
+        val whereClause = "$COLUMN_ITEM_ID = ?"
+        val whereArgs = arrayOf(itemId.toString())
+        db.update(TABLE_CHECKLIST_ITEM_NAME, values, whereClause, whereArgs)
         db.close()
     }
 

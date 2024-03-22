@@ -7,15 +7,15 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/editTextChecklistItem"
+        android:id="@+id/dialogEditChecklistItemContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:lines="1"
+        android:lines="3"
         android:minLines="1"
         android:maxLines="3"
         android:backgroundTint="@color/orange"
-        android:hint="@string/EnterChecklistItemContent"
+        android:hint="@string/EditChecklistItemContent"
         android:importantForAutofill="no" />
 
     <LinearLayout
@@ -25,7 +25,7 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/buttonCancel"
+            android:id="@+id/dialogButtonCancel"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -33,13 +33,11 @@
             tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/buttonConfirm"
+            android:id="@+id/dialogButtonConfirm"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/ConfirmButton"
             tools:ignore="ButtonStyle" />
-
-
     </LinearLayout>
 </LinearLayout>
