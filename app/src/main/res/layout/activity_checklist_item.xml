@@ -20,14 +20,16 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentStart="true"
                 android:contentDescription="@string/Checkbox"
                 android:src="@drawable/ic_check_box"
-                android:paddingTop="2dp"/>
+                android:paddingTop="2dp"
+                android:checked="false"
+                />
 
             <TextView
                 android:id="@+id/contentChecklistItemTextView"

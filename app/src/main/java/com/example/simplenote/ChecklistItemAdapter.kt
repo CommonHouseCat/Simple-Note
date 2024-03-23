@@ -2,6 +2,8 @@ package com.example.simplenote
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +13,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, private val context: Context) : RecyclerView.Adapter<ChecklistItemAdapter.ChecklistItemViewHolder>() {
 
     private val db: NoteDBHelper = NoteDBHelper(context)
-    private var checkboxClickListener: OnCheckboxClickListener? = null
 
-    interface OnCheckboxClickListener {
-        fun onCheckboxClick(position: Int, isChecked: Boolean)
-    }
 
     class ChecklistItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val checklistItemContentTextView: TextView = itemView.findViewById(R.id.contentChecklistItemTextView)
@@ -35,15 +34,15 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
 
     override fun getItemCount(): Int = checklistItems.size
 
-    fun setOnCheckboxClickListener(listener: OnCheckboxClickListener) {
-        checkboxClickListener = listener
-    }
+
 
     override fun onBindViewHolder(holder: ChecklistItemViewHolder, position: Int) {
         val checklistItem = checklistItems[position]
         holder.checklistItemContentTextView.text = checklistItem.itemContent
+        holder.checklistItemCheckbox.isChecked = checklistItem.isChecked
 
-        // Update Checklist Content
+
+        // Update Checklist Content with a dialog
         holder.checklistItemContentTextView.setOnClickListener {
             val oldContent = checklistItem.itemContent
 
@@ -53,7 +52,6 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
             // Create the dialog
             val builder = AlertDialog.Builder(context)
                 .setView(dialogView)
-                .setTitle("Edit Checklist Item")
 
             val editTextChecklistItem = dialogView.findViewById<EditText>(R.id.dialogEditChecklistItemContent)
             editTextChecklistItem.setText(oldContent)
@@ -82,11 +80,43 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
             }
             // Show the dialog
             dialog.show()
-
-            holder.checklistItemCheckbox.isChecked = checklistItem.isChecked
         }
 
+        // Update appearance of content text based on checkbox state
+        if (checklistItem.isChecked) {
+            // Cross out text if checkbox is checked
+            holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.checklistItemContentTextView.setTextColor(Color.GRAY)
+        } else {
+            // Remove strike-through if checkbox is unchecked
+            holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.checklistItemContentTextView.setTextColor(ContextCompat.getColor(context, R.color.orange))
+        }
 
+        // Set listener for checkbox state changes
+        holder.checklistItemCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            // Update isChecked value in checklist item object
+            checklistItem.isChecked = isChecked
+
+            // Update appearance of content text based on checkbox state
+            if (isChecked) {
+                // Cross out text if checkbox is checked
+                holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                holder.checklistItemContentTextView.setTextColor(Color.GRAY)
+            } else {
+                // Remove strike-through if checkbox is unchecked
+                holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.checklistItemContentTextView.setTextColor(ContextCompat.getColor(context, R.color.orange))
+            }
+
+            // Update isChecked value in database
+            val itemContent = checklistItem.itemContent
+            val itemId = db.getItemIdByContent(itemContent)
+            db.updateChecklistItemState(itemId, checklistItem.isChecked)
+
+            // Notify adapter that data has changed
+            refreshData(db.getAllChecklistsItem(checklistItem.checklistIDfk))
+        }
 
         // The delete button
         holder.checklistItemDeleteButton.setOnClickListener{
@@ -96,8 +126,6 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
         }
 
     }
-
-
 
     fun refreshData(newChecklistItems: List<ChecklistItemDC>){
         checklistItems = newChecklistItems

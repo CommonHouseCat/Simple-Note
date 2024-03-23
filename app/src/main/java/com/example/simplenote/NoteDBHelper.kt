@@ -6,8 +6,7 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
+
 
 
 class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -34,7 +33,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
         val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT UNIQUE)"
-        val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
+        val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT UNIQUE, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
 
         db?.execSQL(createTableQuery)
         db?.execSQL(createChecklistTableQuery)
@@ -197,17 +196,18 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
 
     // This portion is for checklist Items --------------------------------------------------------------------------------------------------------------------
-    // Vanilla could be enough
     fun insertChecklistItem(checklistItemDC: ChecklistItemDC, currentChecklistID: Int){
         val db = writableDatabase
         val values = ContentValues().apply{
             put(COLUMN_CHECKLIST_ID_FK, currentChecklistID)
             put(COLUMN_ITEM_CONTENT, checklistItemDC.itemContent)
-            put(COLUMN_IS_CHECKED, checklistItemDC.isChecked)
+            put(COLUMN_IS_CHECKED, false)
         }
         db.insert(TABLE_CHECKLIST_ITEM_NAME, null, values)
         db.close()
     }
+
+
 
     // Get the currently editing checklist ID through title
     fun getCurrentChecklistID(checklistTitle: String): Int{
@@ -233,7 +233,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         while(cursor.moveToNext()){
             val itemID = cursor.getInt(cursor.getColumnIndexOrThrow((COLUMN_ITEM_ID)))
             val itemContent = cursor.getString(cursor.getColumnIndexOrThrow((COLUMN_ITEM_CONTENT)))
-            val isChecked = cursor.getInt(cursor.getColumnIndexOrThrow((COLUMN_IS_CHECKED))) == 0
+            val isChecked = cursor.getInt(cursor.getColumnIndexOrThrow((COLUMN_IS_CHECKED))) == 1
 
             val checklistItemDC = ChecklistItemDC(itemID, currentChecklistID, itemContent, isChecked)
             checklistItemList.add(checklistItemDC)
@@ -263,15 +263,32 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.close()
     }
 
-    fun updateCheckboxState(itemId: Int, isChecked: Boolean){
+    // Update the checkbox state (checked and unchecked)
+    fun updateChecklistItemState(itemId: Int, isChecked: Boolean) {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_IS_CHECKED, if(isChecked) 1 else 0)
+            put(COLUMN_IS_CHECKED, isChecked)
         }
         val whereClause = "$COLUMN_ITEM_ID = ?"
         val whereArgs = arrayOf(itemId.toString())
         db.update(TABLE_CHECKLIST_ITEM_NAME, values, whereClause, whereArgs)
         db.close()
     }
+
+    // Get Checklist Item ID through the content string
+    fun getItemIdByContent(itemContent: String): Int {
+        val db = readableDatabase
+        var itemId = -1
+        val query = "SELECT $COLUMN_ITEM_ID FROM $TABLE_CHECKLIST_ITEM_NAME WHERE $COLUMN_ITEM_CONTENT = ?"
+        val selectionArgs = arrayOf(itemContent)
+        val cursor = db.rawQuery(query, selectionArgs)
+        if (cursor.moveToFirst()) {
+            itemId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ITEM_ID))
+        }
+        cursor.close()
+        db.close()
+        return itemId
+    }
+
 
 }

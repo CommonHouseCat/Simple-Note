@@ -29,6 +29,7 @@
     <string name="EnterChecklistItemContent">Enter Item Content</string>
     <string name="EnterChecklistTitle">Enter Checklist Title</string>
     <string name="EditChecklistItemContent">Edit Item Content</string>
+    <string name="AddChecklistItemContent">Add Item Content</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
