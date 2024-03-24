@@ -1,7 +1,10 @@
 package com.example.simplenote
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplenote.databinding.ActivityAddChecklistBinding
@@ -41,7 +44,7 @@ class AddChecklistActivity : AppCompatActivity() {
         // Add Item button
         val title = checklist.checklistTitle
         binding.addChecklistItemButton.setOnClickListener{
-            showChecklistItemPopup(title)
+            showCreateChecklistItemDialog(title)
         }
 
         // Checklist Item RecycleView
@@ -60,12 +63,28 @@ class AddChecklistActivity : AppCompatActivity() {
         checklistItemAdapter.refreshData(db.getAllChecklistsItem(currentChecklistID))
     }
 
-    private fun showChecklistItemPopup(title: String){
-        val fragmentManager = supportFragmentManager
-        val currentChecklistID = db.getCurrentChecklistID(title)
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        val fragment = ChecklistItemPopup(currentChecklistID)
-        fragmentTransaction.add(fragment, "ChecklistItemPopup")
-        fragmentTransaction.commit()
+    // Working with the Dialog view for adding new Checklist Item
+    private fun showCreateChecklistItemDialog(title: String){
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_checklist_item, null)
+        val editTextChecklistItem = dialogView.findViewById<EditText>(R.id.dialogAddChecklistItemContent)
+
+        val dialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val dialog = dialogBuilder.create()
+
+        dialogView.findViewById<Button>(R.id.dialogAddButtonConfirm).setOnClickListener {
+            val content = editTextChecklistItem.text.toString()
+            val currentChecklistID = db.getCurrentChecklistID(title)
+            val checklistItem = ChecklistItemDC(0, currentChecklistID, content, false)
+            db.insertChecklistItem(checklistItem, currentChecklistID)
+            onResume()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.dialogAddButtonCancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
+

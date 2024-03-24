@@ -72,6 +72,7 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
 
                 // Update the UI
                 refreshData(db.getAllChecklistsItem(checklistItem.checklistIDfk))
+
                 dialog.dismiss()
             }
 

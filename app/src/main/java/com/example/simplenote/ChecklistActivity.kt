@@ -3,8 +3,11 @@ package com.example.simplenote
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -29,7 +32,7 @@ class ChecklistActivity : AppCompatActivity() {
         binding.toolbar.setOnMenuItemClickListener{menuItem ->
             when(menuItem.itemId){
                 R.id.add_note -> {
-                    showCreateChecklistPopup()
+                    showDialogCreateChecklistPopup()
                     true
                 }
                 else -> false
@@ -105,12 +108,24 @@ class ChecklistActivity : AppCompatActivity() {
         checklistMenuAdapter.refreshData(db.getAllChecklists())
     }
 
-    private fun showCreateChecklistPopup(){
-        val fragmentManger = supportFragmentManager
-        val fragmentTransaction = fragmentManger.beginTransaction()
-        val fragment = CreateChecklistPopup()
-        fragmentTransaction.add(fragment, "CreateChecklistPopup")
-        fragmentTransaction.commit()
-    }
+    private fun showDialogCreateChecklistPopup(){
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_checklist, null)
+        val editTextChecklist = dialogView.findViewById<EditText>(R.id.dialogAddChecklistTitle)
 
+        val dialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val dialog = dialogBuilder.create()
+
+        dialogView.findViewById<Button>(R.id.dialogButtonConfirmChecklistMenu).setOnClickListener {
+            val title = editTextChecklist.text.toString()
+            val checklist = ChecklistDC(0, title)
+            db.insertChecklist(checklist)
+            onResume()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.dialogButtonCancelChecklistMenu).setOnClickListener{
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
 }
