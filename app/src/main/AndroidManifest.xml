@@ -15,7 +15,7 @@
 
 
         <activity
-            android:name=".AddChecklistActivity"
+            android:name=".UpdateChecklistActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"

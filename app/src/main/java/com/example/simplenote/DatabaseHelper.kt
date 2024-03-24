@@ -9,7 +9,7 @@ import android.util.Log
 
 
 
-class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
     companion object{
         private const val DATABASE_NAME = "simplenote.db"
         private const val DATABASE_VERSION = 1
@@ -56,18 +56,18 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
 
     // This portion is for the Note ----------------------------------------------------------------------------------------------------------------------------
-    fun insertNote(noteDT: NoteDT){
+    fun insertNote(noteDC: NoteDC){
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_TITLE, noteDT.title)
-            put(COLUMN_CONTENT, noteDT.content)
+            put(COLUMN_TITLE, noteDC.title)
+            put(COLUMN_CONTENT, noteDC.content)
         }
         db.insert(TABLE_NAME, null, values)
         db.close()
     }
 
-    fun getAllNotes(): List<NoteDT>{
-        val noteList = mutableListOf<NoteDT>()
+    fun getAllNotes(): List<NoteDC>{
+        val noteList = mutableListOf<NoteDC>()
         val db = writableDatabase
         val query = "SELECT * FROM $TABLE_NAME"
         val cursor = db.rawQuery(query, null)
@@ -77,7 +77,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             val title = cursor.getString(cursor.getColumnIndexOrThrow((COLUMN_TITLE)))
             val content = cursor.getString(cursor.getColumnIndexOrThrow((COLUMN_CONTENT)))
 
-            val notedt = NoteDT(id, title, content)
+            val notedt = NoteDC(id, title, content)
             noteList.add(notedt)
         }
         cursor.close()
@@ -85,19 +85,19 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return noteList
     }
 
-    fun updateNote(noteDT: NoteDT){
+    fun updateNote(noteDC: NoteDC){
         val db = writableDatabase
         val values = ContentValues().apply{
-            put(COLUMN_TITLE, noteDT.title)
-            put(COLUMN_CONTENT, noteDT.content)
+            put(COLUMN_TITLE, noteDC.title)
+            put(COLUMN_CONTENT, noteDC.content)
         }
         val whereClause = "$COLUMN_ID = ?"
-        val whereArgs = arrayOf(noteDT.id.toString())
+        val whereArgs = arrayOf(noteDC.id.toString())
         db.update(TABLE_NAME, values, whereClause, whereArgs)
         db.close()
     }
 
-    fun getNoteByID(noteID: Int): NoteDT{
+    fun getNoteByID(noteID: Int): NoteDC{
         val db = writableDatabase
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID = $noteID"
         val cursor = db.rawQuery(query, null)
@@ -109,7 +109,7 @@ class NoteDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         cursor.close()
         db.close()
-        return NoteDT(id, title, content)
+        return NoteDC(id, title, content)
     }
 
     fun deleteNote(nodeID: Int){

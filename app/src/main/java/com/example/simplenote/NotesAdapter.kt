@@ -11,9 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class NotesAdapter(private var notes: List<NoteDT>, context: Context) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
+class NotesAdapter(private var notes: List<NoteDC>, context: Context) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
-    private val db: NoteDBHelper = NoteDBHelper(context)
+    private val db: DatabaseHelper = DatabaseHelper(context)
 
     class NoteViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
@@ -57,7 +57,7 @@ class NotesAdapter(private var notes: List<NoteDT>, context: Context) : Recycler
         }
     }
 
-    fun refreshData(newNotes: List<NoteDT>){
+    fun refreshData(newNotes: List<NoteDC>){
         notes = newNotes
         Log.d("TAG", "Refresh Data")
         notifyDataSetChanged()

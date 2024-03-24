@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, private val context: Context) : RecyclerView.Adapter<ChecklistItemAdapter.ChecklistItemViewHolder>() {
 
-    private val db: NoteDBHelper = NoteDBHelper(context)
+    private val db: DatabaseHelper = DatabaseHelper(context)
 
 
     class ChecklistItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

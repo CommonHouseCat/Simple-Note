@@ -18,8 +18,8 @@ import com.example.simplenote.databinding.ActivityChecklistBinding
 class ChecklistActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChecklistBinding
-    private lateinit var db: NoteDBHelper
-    private lateinit var checklistMenuAdapter: ChecklistMenuAdapter
+    private lateinit var db: DatabaseHelper
+    private lateinit var checklistsAdapter: ChecklistsAdapter
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,11 +39,11 @@ class ChecklistActivity : AppCompatActivity() {
             }
         }
 
-        db = NoteDBHelper(this)
-        checklistMenuAdapter = ChecklistMenuAdapter(db.getAllChecklists(), this)
+        db = DatabaseHelper(this)
+        checklistsAdapter = ChecklistsAdapter(db.getAllChecklists(), this)
 
         binding.checklistRecycleView.layoutManager = LinearLayoutManager(this)
-        binding.checklistRecycleView.adapter = checklistMenuAdapter
+        binding.checklistRecycleView.adapter = checklistsAdapter
 
 
         drawerLayout = binding.drawerLayout
@@ -105,7 +105,7 @@ class ChecklistActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checklistMenuAdapter.refreshData(db.getAllChecklists())
+        checklistsAdapter.refreshData(db.getAllChecklists())
     }
 
     private fun showDialogCreateChecklistPopup(){

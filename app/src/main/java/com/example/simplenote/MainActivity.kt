@@ -15,7 +15,7 @@ import com.example.simplenote.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var db: NoteDBHelper
+    private lateinit var db: DatabaseHelper
     private lateinit var notesAdapter: NotesAdapter
     private lateinit var drawerLayout: DrawerLayout
 
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        db = NoteDBHelper(this)
+        db = DatabaseHelper(this)
         notesAdapter = NotesAdapter(db.getAllNotes(), this)
 
         binding.notesRecycleView.layoutManager = LinearLayoutManager(this)

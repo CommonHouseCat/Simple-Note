@@ -10,9 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class ChecklistMenuAdapter(private var checklists: List<ChecklistDC>, context: Context) : RecyclerView.Adapter<ChecklistMenuAdapter.ChecklistViewHolder>() {
+class ChecklistsAdapter(private var checklists: List<ChecklistDC>, context: Context) : RecyclerView.Adapter<ChecklistsAdapter.ChecklistViewHolder>() {
 
-    private var db : NoteDBHelper = NoteDBHelper(context)
+    private var db : DatabaseHelper = DatabaseHelper(context)
 
     class ChecklistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val checklistTitleTextView: TextView = itemView.findViewById(R.id.titleChecklistMenuItemTextView)
@@ -32,7 +32,7 @@ class ChecklistMenuAdapter(private var checklists: List<ChecklistDC>, context: C
         holder.checklistTitleTextView.text = checklist.checklistTitle
 
         holder.checklistUpdateButton.setOnClickListener{
-            val intent= Intent(holder.itemView.context, AddChecklistActivity::class.java).apply {
+            val intent= Intent(holder.itemView.context, UpdateChecklistActivity::class.java).apply {
                 putExtra("checklistID", checklist.checklistID)
             }
             holder.itemView.context.startActivity(intent)

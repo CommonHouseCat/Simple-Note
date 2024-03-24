@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplenote.databinding.ActivityAddChecklistBinding
 
-class AddChecklistActivity : AppCompatActivity() {
+class UpdateChecklistActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddChecklistBinding
-    private lateinit var db: NoteDBHelper
+    private lateinit var db: DatabaseHelper
     private lateinit var checklistItemAdapter: ChecklistItemAdapter
     private var checklistId: Int  = -1
 
@@ -21,7 +21,7 @@ class AddChecklistActivity : AppCompatActivity() {
         binding = ActivityAddChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = NoteDBHelper(this)
+        db = DatabaseHelper(this)
 
         // Update Checklist Button
         checklistId = intent.getIntExtra("checklistID", -1)

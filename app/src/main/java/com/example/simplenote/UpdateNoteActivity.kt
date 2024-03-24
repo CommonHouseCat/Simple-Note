@@ -8,7 +8,7 @@ import com.example.simplenote.databinding.ActivityUpdateNoteBinding
 class UpdateNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUpdateNoteBinding
-    private lateinit var db: NoteDBHelper
+    private lateinit var db: DatabaseHelper
     private var noteID: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +16,7 @@ class UpdateNoteActivity : AppCompatActivity() {
         binding = ActivityUpdateNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = NoteDBHelper(this)
+        db = DatabaseHelper(this)
 
         noteID = intent.getIntExtra("note_id", -1)
         if(noteID == -1){
@@ -31,7 +31,7 @@ class UpdateNoteActivity : AppCompatActivity() {
         binding.updateSaveButton.setOnClickListener{
             val newTitle= binding.updateTitleEditText.text.toString()
             val newContent = binding.updateContentEditText.text.toString()
-            val updatedNote = NoteDT(noteID, newTitle, newContent)
+            val updatedNote = NoteDC(noteID, newTitle, newContent)
             db.updateNote(updatedNote)
             finish()
             Toast.makeText(this, "Changes Saved", Toast.LENGTH_SHORT).show()
