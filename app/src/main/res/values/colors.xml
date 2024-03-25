@@ -9,4 +9,5 @@
     <color name="lavender">#8692F7</color>
     <color name="orange">#ed5f1e</color>
     <color name="grey">#808080</color>
+    <color name="selectorThumbWhite">#F8EFEC</color>
 </resources>

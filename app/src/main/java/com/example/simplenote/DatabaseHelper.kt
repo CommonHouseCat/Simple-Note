@@ -1,3 +1,5 @@
+@file:Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
+
 package com.example.simplenote
 
 import android.content.ContentValues
@@ -6,7 +8,8 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -28,16 +31,25 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_CHECKLIST_ID_FK = "itemFK"
         private const val COLUMN_ITEM_CONTENT = "itemContent"
         private const val COLUMN_IS_CHECKED = "itemIsChecked"
+        //Table for reminders
+        private const val TABLE_REMINDER_NAME = "reminder"
+        private const val COLUMN_REMINDER_ID = "reminderID"
+        private const val COLUMN_TIME = "reminderTime"
+        private const val COLUMN_DATE = "reminderDate"
+        private const val COLUMN_REMINDER_NAME = "reminderName"
+        private const val COLUMN_IS_ACTIVATED = "reminderIsActivated"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
         val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT UNIQUE)"
         val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT UNIQUE, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
+        val createReminderTableQuery = "CREATE TABLE $TABLE_REMINDER_NAME ($COLUMN_REMINDER_ID INTEGER PRIMARY KEY, $COLUMN_TIME TEXT, $COLUMN_DATE TEXT, $COLUMN_REMINDER_NAME TEXT, $COLUMN_IS_ACTIVATED INTEGER DEFAULT 0)"
 
         db?.execSQL(createTableQuery)
         db?.execSQL(createChecklistTableQuery)
         db?.execSQL(createChecklistItemTableQuery)
+        db?.execSQL(createReminderTableQuery)
     }
 
 
@@ -50,6 +62,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         val dropChecklistItemTableQuery = "DROP TABLE IF EXISTS $TABLE_CHECKLIST_ITEM_NAME"
         db?.execSQL(dropChecklistItemTableQuery)
+
+        val dropReminderTableQuery = "DROP TABLE IF EXISTS $TABLE_REMINDER_NAME"
+        db?.execSQL(dropReminderTableQuery)
 
         onCreate(db)
     }
@@ -194,7 +209,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-
     // This portion is for checklist Items --------------------------------------------------------------------------------------------------------------------
     fun insertChecklistItem(checklistItemDC: ChecklistItemDC, currentChecklistID: Int){
         val db = writableDatabase
@@ -208,12 +222,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-
     // Get the currently editing checklist ID through title
     fun getCurrentChecklistID(checklistTitle: String): Int{
         val db = writableDatabase
         var currentChecklistID = -1
-        val query = "SELECT * FROM $TABLE_CHECKLIST_NAME WHERE $COLUMN_CHECKLIST_TITLE = '$checklistTitle'" // single quote for strings, without means column name
+        // single quote for strings, without means column name
+        val query = "SELECT * FROM $TABLE_CHECKLIST_NAME WHERE $COLUMN_CHECKLIST_TITLE = '$checklistTitle'"
         val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
 
@@ -290,5 +304,20 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return itemId
     }
 
+
+    // This portion is for Reminder  --------------------------------------------------------------------------------------------------------------------
+    fun insertReminder(reminderDC: ReminderDC){
+        val db = writableDatabase
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val values = ContentValues().apply {
+            put(COLUMN_TIME, timeFormat.format(reminderDC.time.time))
+            put(COLUMN_DATE, dateFormat.format(reminderDC.date.time))
+            put(COLUMN_REMINDER_NAME, reminderDC.reminderName)
+            put(COLUMN_IS_ACTIVATED, false)
+        }
+        db.insert(TABLE_REMINDER_NAME, null, values)
+        db.close()
+    }
 
 }

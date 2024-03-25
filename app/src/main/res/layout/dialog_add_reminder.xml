@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/selectTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selectTime"
+                android:textSize="19sp"
+                android:textColor="@color/orange"
+                android:fontFamily="@font/poppins"
+                android:textStyle="bold"
+                android:maxLines="1"/>
+
+            <EditText
+                android:id="@+id/addReminderTimeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/selectTimeTextView"
+                android:layout_toStartOf="@id/selectTimeButton"
+                android:layout_marginStart="5dp"
+                android:textSize="19sp"
+                android:layout_alignBaseline="@+id/selectTimeTextView"
+                android:backgroundTint="@color/orange"
+                android:importantForAutofill="no"
+                android:inputType="time"
+                android:maxLines="1"
+                tools:ignore="LabelFor" />
+
+            <ImageView
+                android:id="@+id/selectTimeButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_time"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/time" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/selectDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selectDate"
+                android:textSize="19sp"
+                android:textColor="@color/orange"
+                android:fontFamily="@font/poppins"
+                android:textStyle="bold"
+                android:maxLines="1"/>
+
+            <EditText
+                android:id="@+id/addReminderDateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/selectDateButton"
+                android:layout_toEndOf="@+id/selectDateTextView"
+                android:layout_alignBaseline="@+id/selectDateTextView"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/orange"
+                android:importantForAutofill="no"
+                android:inputType="date"
+                android:maxLines="1"
+                android:textSize="19sp"
+                tools:ignore="LabelFor" />
+
+            <ImageView
+                android:id="@+id/selectDateButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calender"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/calender" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/dialogReminderNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
+            android:backgroundTint="@color/orange"
+            android:hint="@string/AddChecklistItemContent"
+            android:importantForAutofill="no" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="5dp">
+
+            <Button
+                android:id="@+id/dialogCancelReminder"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CancelButton"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/dialogConfirmReminder"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/ConfirmButton"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

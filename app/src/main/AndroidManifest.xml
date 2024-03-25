@@ -25,7 +25,8 @@
             android:exported="false" />
         <activity
             android:name=".ReminderActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ChecklistActivity"
             android:exported="false"

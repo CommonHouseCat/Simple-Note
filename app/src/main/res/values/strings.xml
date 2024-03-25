@@ -5,7 +5,7 @@
     <string name="Edit_checklist">Edit Checklist</string>
     <string name="Note">Notes</string>
     <string name="Checklist">Checklists</string>
-    <string name="Reminder">Reminder</string>
+    <string name="Reminder">Reminders</string>
     <string name="ProgressChecker">Progress Tracker</string>
     <string name="Settings">Settings</string>
     <string name="AddNote">Add Note.</string>
@@ -30,6 +30,14 @@
     <string name="EnterChecklistTitle">Enter Checklist Title</string>
     <string name="EditChecklistItemContent">Edit Item Content</string>
     <string name="AddChecklistItemContent">Add Item Content</string>
+    <string name="editReminder">Edit Reminder</string>
+    <string name="deleteReminder">Delete Reminder</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="selectDate">Select Date: </string>
+    <string name="selectTime">Select Time: </string>
+    <string name="clock">Select Time</string>
+    <string name="calender">Select Date</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
