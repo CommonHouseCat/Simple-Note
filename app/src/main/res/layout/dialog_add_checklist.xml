@@ -6,6 +6,17 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <TextView
+        android:id="@+id/addChecklistItemDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newChecklist"
+        android:layout_gravity="center_horizontal"
+        android:textSize="25sp"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/orange"
+        android:textStyle="bold"/>
+
     <EditText
         android:id="@+id/dialogAddChecklistTitle"
         android:layout_width="match_parent"
@@ -26,7 +37,7 @@
 
         <Button
             android:id="@+id/dialogButtonCancelChecklistMenu"
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/CancelButton"
@@ -34,7 +45,7 @@
 
         <Button
             android:id="@+id/dialogButtonConfirmChecklistMenu"
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/ConfirmButton"

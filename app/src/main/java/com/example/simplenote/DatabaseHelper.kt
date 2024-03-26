@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 
@@ -317,6 +319,46 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_IS_ACTIVATED, false)
         }
         db.insert(TABLE_REMINDER_NAME, null, values)
+        db.close()
+    }
+
+    fun getAllReminder(): List<ReminderDC>{
+        val reminderList = mutableListOf<ReminderDC>()
+        val db = writableDatabase
+        val query = "SELECT * FROM $TABLE_REMINDER_NAME"
+        val cursor = db.rawQuery(query, null)
+
+        while(cursor.moveToNext()){
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REMINDER_ID))
+
+            // Parse time string to Calendar
+            val time = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIME))
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val timeCalendar = Calendar.getInstance()
+            timeCalendar.time = timeFormat.parse(time) ?: Date()
+
+            // Parse date string to Calendar
+            val date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE))
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val dateCalendar = Calendar.getInstance()
+            dateCalendar.time = dateFormat.parse(date) ?: Date()
+
+            val name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REMINDER_NAME))
+            val isActivated = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_ACTIVATED)) == 1
+
+            val reminder = ReminderDC(id, timeCalendar, dateCalendar, name, isActivated)
+            reminderList.add(reminder)
+        }
+        cursor.close()
+        db.close()
+        return reminderList
+    }
+
+    fun deleteReminder(reminderID: Int){
+        val db = writableDatabase
+        val whereClause = "$COLUMN_REMINDER_ID = ?"
+        val whereArgs = arrayOf(reminderID.toString())
+        db.delete(TABLE_REMINDER_NAME, whereClause, whereArgs)
         db.close()
     }
 

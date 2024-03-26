@@ -8,12 +8,14 @@ import android.view.Menu
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplenote.databinding.ActivityReminderBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -26,6 +28,7 @@ class ReminderActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReminderBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var db : DatabaseHelper
+    private lateinit var reminderAdapter: RemindersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,10 @@ class ReminderActivity : AppCompatActivity() {
         }
 
         db = DatabaseHelper(this)
+
+        reminderAdapter = RemindersAdapter(db.getAllReminder(), this)
+        binding.reminderRecycleView.layoutManager = LinearLayoutManager(this)
+        binding.reminderRecycleView.adapter = reminderAdapter
 
 
         drawerLayout = binding.drawerLayout
@@ -103,6 +110,11 @@ class ReminderActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
+
+    override fun onResume() {
+        super.onResume()
+        reminderAdapter.refreshData(db.getAllReminder())
+    }
        
     private fun showDialogCreateReminderPopup(){
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_reminder, null)
@@ -137,6 +149,8 @@ class ReminderActivity : AppCompatActivity() {
 
             val reminder = ReminderDC(0, timeCalendar, dateCalendar, name, false)
             db.insertReminder(reminder)
+            Toast.makeText(this, "Reminder Saved", Toast.LENGTH_SHORT).show()
+            onResume()
             dialog.dismiss()
         }
 
