@@ -46,7 +46,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
         val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT UNIQUE)"
         val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT UNIQUE, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
-        val createReminderTableQuery = "CREATE TABLE $TABLE_REMINDER_NAME ($COLUMN_REMINDER_ID INTEGER PRIMARY KEY, $COLUMN_TIME TEXT, $COLUMN_DATE TEXT, $COLUMN_REMINDER_NAME TEXT, $COLUMN_IS_ACTIVATED INTEGER DEFAULT 0)"
+        val createReminderTableQuery = "CREATE TABLE $TABLE_REMINDER_NAME ($COLUMN_REMINDER_ID INTEGER PRIMARY KEY, $COLUMN_TIME TEXT, $COLUMN_DATE TEXT, $COLUMN_REMINDER_NAME TEXT, $COLUMN_IS_ACTIVATED INTEGER DEFAULT 1)"
 
         db?.execSQL(createTableQuery)
         db?.execSQL(createChecklistTableQuery)
@@ -316,7 +316,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_TIME, timeFormat.format(reminderDC.time.time))
             put(COLUMN_DATE, dateFormat.format(reminderDC.date.time))
             put(COLUMN_REMINDER_NAME, reminderDC.reminderName)
-            put(COLUMN_IS_ACTIVATED, false)
+            put(COLUMN_IS_ACTIVATED, true)
         }
         db.insert(TABLE_REMINDER_NAME, null, values)
         db.close()
@@ -354,11 +354,35 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return reminderList
     }
 
+    fun updateReminder(reminderID: Int, newTime: String, newDate: String, newName: String){
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_TIME, newTime)
+            put(COLUMN_DATE, newDate)
+            put(COLUMN_REMINDER_NAME, newName)
+        }
+        val whereClause = "$COLUMN_REMINDER_ID = ?"
+        val whereArgs = arrayOf(reminderID.toString())
+        db.update(TABLE_REMINDER_NAME,values, whereClause, whereArgs)
+        db.close()
+    }
+
     fun deleteReminder(reminderID: Int){
         val db = writableDatabase
         val whereClause = "$COLUMN_REMINDER_ID = ?"
         val whereArgs = arrayOf(reminderID.toString())
         db.delete(TABLE_REMINDER_NAME, whereClause, whereArgs)
+        db.close()
+    }
+
+    fun updateReminderState(reminderID: Int, isActivated: Boolean){
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_IS_ACTIVATED, isActivated)
+        }
+        val whereClause = "$COLUMN_REMINDER_ID = ?"
+        val whereArgs = arrayOf(reminderID.toString())
+        db.update(TABLE_REMINDER_NAME, values, whereClause, whereArgs)
         db.close()
     }
 

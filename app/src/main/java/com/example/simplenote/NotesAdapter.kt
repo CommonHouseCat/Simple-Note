@@ -59,7 +59,7 @@ class NotesAdapter(private var notes: List<NoteDC>, context: Context) : Recycler
 
     fun refreshData(newNotes: List<NoteDC>){
         notes = newNotes
-        Log.d("TAG", "Refresh Data")
+//        Log.d("TAG", "Refresh Data")
         notifyDataSetChanged()
     }
 }
