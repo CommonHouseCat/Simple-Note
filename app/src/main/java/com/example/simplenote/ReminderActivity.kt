@@ -1,6 +1,13 @@
 package com.example.simplenote
 
+
 import android.app.DatePickerDialog
+//import android.app.AlarmManager
+//import android.app.NotificationChannel
+//import android.app.NotificationManager
+//import android.app.PendingIntent
+//import android.content.Context
+//import kotlin.random.Random
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +30,7 @@ import java.util.Date
 import java.util.Locale
 
 
+
 class ReminderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReminderBinding
@@ -37,10 +45,14 @@ class ReminderActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
+        // Create the notification channel
+        //createNotificationChannel()
+
         binding.toolbar.setOnMenuItemClickListener {menuItem ->
             when(menuItem.itemId){
                 R.id.add_note -> {
                     showDialogCreateReminderPopup()
+                    //scheduleNotification("reminderName", System.currentTimeMillis() + 5000)
                     true
                 }
                 else -> false
@@ -152,6 +164,7 @@ class ReminderActivity : AppCompatActivity() {
             Toast.makeText(this, "Reminder Saved", Toast.LENGTH_SHORT).show()
             onResume()
             dialog.dismiss()
+
         }
 
         dialogView.findViewById<Button>(R.id.dialogCancelReminder).setOnClickListener{
@@ -205,5 +218,7 @@ class ReminderActivity : AppCompatActivity() {
         )
         datePickerDialog.show()
     }
+
+
 
 }

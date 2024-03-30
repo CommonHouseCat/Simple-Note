@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // The plus icon on the toobar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true

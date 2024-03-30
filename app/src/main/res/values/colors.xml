@@ -11,4 +11,7 @@
     <color name="grey">#808080</color>
     <color name="selectorThumbWhite">#F8EFEC</color>
     <color name="bone">#F8EFEC</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="green">#00FF00</color>
 </resources>

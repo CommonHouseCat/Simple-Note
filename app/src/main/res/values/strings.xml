@@ -6,7 +6,7 @@
     <string name="Note">Notes</string>
     <string name="Checklist">Checklists</string>
     <string name="Reminder">Reminders</string>
-    <string name="ProgressChecker">Progress Tracker</string>
+    <string name="ProgressTracker">Progress Tracker</string>
     <string name="Settings">Settings</string>
     <string name="AddNote">Add Note.</string>
     <string name="EnterNoteTitle">Enter note title</string>
@@ -43,6 +43,19 @@
     <string name="newChecklist">New Checklist</string>
     <string name="newChecklistItem">New Checklist Item</string>
     <string name="reminderName">Enter Reminder Name</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="notificationText">Reminder</string>
+    <string name="notificationTitle">Title</string>
+    <string name="lateDesc">Late Task</string>
+    <string name="lateTasks">Late Tasks</string>
+    <string name="unfinishedDesc">Unfinished Task</string>
+    <string name="unfinishedTasks">Unfinished Tasks</string>
+    <string name="onTimeDesc">On Time Task</string>
+    <string name="onTimeTasks">On Time Tasks</string>
+    <string name="rateNewTaskButton">Rate New Task</string>
+    <string name="deleteAllProgressButton">Delete All Progress</string>
+    <string name="rateYourTaskTitle">Rate Your Task</string>
+    <string name="late">Late</string>
+    <string name="unfinished">Unfinished</string>
+    <string name="onTime">On Time</string>
 </resources>

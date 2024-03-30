@@ -18,28 +18,33 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     companion object{
         private const val DATABASE_NAME = "simplenote.db"
         private const val DATABASE_VERSION = 1
-        //Table for notes
+        // Table for notes
         private const val TABLE_NAME = "notes"
         private const val COLUMN_ID = "id"
         private const val COLUMN_TITLE = "title"
         private const val COLUMN_CONTENT = "content"
-        //Table for checklists
+        // Table for checklists
         private const val TABLE_CHECKLIST_NAME = "checklists"
         private const val COLUMN_CHECKLIST_ID = "checklistID"
         private const val COLUMN_CHECKLIST_TITLE = "checklistTitle"
-        //Table for checklist items
+        // Table for checklist items
         private const val TABLE_CHECKLIST_ITEM_NAME = "checklistsItem"
         private const val COLUMN_ITEM_ID = "itemID"
         private const val COLUMN_CHECKLIST_ID_FK = "itemFK"
         private const val COLUMN_ITEM_CONTENT = "itemContent"
         private const val COLUMN_IS_CHECKED = "itemIsChecked"
-        //Table for reminders
+        // Table for reminders
         private const val TABLE_REMINDER_NAME = "reminder"
         private const val COLUMN_REMINDER_ID = "reminderID"
         private const val COLUMN_TIME = "reminderTime"
         private const val COLUMN_DATE = "reminderDate"
         private const val COLUMN_REMINDER_NAME = "reminderName"
         private const val COLUMN_IS_ACTIVATED = "reminderIsActivated"
+        // Table for progress tracker
+        private const val TABLE_TRACKER_NAME = "progressTracker"
+        private const val COLUMN_LATE_TASK = "lateTasks"
+        private const val COLUMN_UNFINISHED_TASK = "unfinishedTasks"
+        private const val COLUMN_ON_TIME_TASK = "onTimeTasks"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -47,11 +52,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val createChecklistTableQuery = "CREATE TABLE $TABLE_CHECKLIST_NAME ($COLUMN_CHECKLIST_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_TITLE TEXT UNIQUE)"
         val createChecklistItemTableQuery = "CREATE TABLE $TABLE_CHECKLIST_ITEM_NAME ($COLUMN_ITEM_ID INTEGER PRIMARY KEY, $COLUMN_CHECKLIST_ID_FK INTEGER, $COLUMN_ITEM_CONTENT TEXT UNIQUE, $COLUMN_IS_CHECKED INTEGER DEFAULT 0, FOREIGN KEY ($COLUMN_CHECKLIST_ID_FK) REFERENCES $TABLE_CHECKLIST_NAME($COLUMN_CHECKLIST_ID))"
         val createReminderTableQuery = "CREATE TABLE $TABLE_REMINDER_NAME ($COLUMN_REMINDER_ID INTEGER PRIMARY KEY, $COLUMN_TIME TEXT, $COLUMN_DATE TEXT, $COLUMN_REMINDER_NAME TEXT, $COLUMN_IS_ACTIVATED INTEGER DEFAULT 1)"
+        val createProgressTrackerQuery = "CREATE TABLE $TABLE_TRACKER_NAME ($COLUMN_LATE_TASK INTEGER DEFAULT 0, $COLUMN_UNFINISHED_TASK INTEGER DEFAULT 0, $COLUMN_ON_TIME_TASK INTEGER DEFAULT 0)"
+
 
         db?.execSQL(createTableQuery)
         db?.execSQL(createChecklistTableQuery)
         db?.execSQL(createChecklistItemTableQuery)
         db?.execSQL(createReminderTableQuery)
+        db?.execSQL(createProgressTrackerQuery)
+
+        // Insert initial values for the tracker table
+        val initialValues = ContentValues().apply {
+            put(COLUMN_LATE_TASK, 0)
+            put(COLUMN_UNFINISHED_TASK, 0)
+            put(COLUMN_ON_TIME_TASK, 0)
+        }
+        db?.insert(TABLE_TRACKER_NAME, null, initialValues)
     }
 
 
@@ -68,6 +84,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val dropReminderTableQuery = "DROP TABLE IF EXISTS $TABLE_REMINDER_NAME"
         db?.execSQL(dropReminderTableQuery)
 
+        val dropTrackerTableQuery = "DROP TABLE IF EXISTS $TABLE_TRACKER_NAME"
+        db?.execSQL(dropTrackerTableQuery)
         onCreate(db)
     }
 
@@ -385,5 +403,71 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.update(TABLE_REMINDER_NAME, values, whereClause, whereArgs)
         db.close()
     }
+
+    // This portion is for the Progress Tracker ----------------------------------------------------------------------------------------------------------------------------
+    fun rateTask(taskType: String) {
+        val db = writableDatabase
+        val selection = "1" // Dummy selection since I want to update all rows
+        db.execSQL("UPDATE $TABLE_TRACKER_NAME SET $taskType = $taskType + 1 WHERE $selection")
+        db.close()
+    }
+
+    fun deleteProgress() {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_LATE_TASK, 0)
+            put(COLUMN_UNFINISHED_TASK, 0)
+            put(COLUMN_ON_TIME_TASK, 0)
+        }
+
+        db.update(TABLE_TRACKER_NAME, values, null, null)
+        db.close()
+    }
+
+    fun getLateTasks(): Int {
+        val db = readableDatabase
+        val query = "SELECT $COLUMN_LATE_TASK FROM $TABLE_TRACKER_NAME"
+        val cursor = db.rawQuery(query, null)
+        var lateTasksCount = 0
+
+        if (cursor.moveToFirst()) {
+            lateTasksCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LATE_TASK))
+        }
+
+        cursor.close()
+        db.close()
+        return lateTasksCount
+    }
+
+    fun getUnfinishedTasks(): Int {
+        val db = readableDatabase
+        val query = "SELECT $COLUMN_UNFINISHED_TASK FROM $TABLE_TRACKER_NAME"
+        val cursor = db.rawQuery(query, null)
+        var unfinishedTasksCount = 0
+
+        if (cursor.moveToFirst()) {
+            unfinishedTasksCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_UNFINISHED_TASK ))
+        }
+
+        cursor.close()
+        db.close()
+        return unfinishedTasksCount
+    }
+
+    fun getOnTimeTasks(): Int {
+        val db = readableDatabase
+        val query = "SELECT $COLUMN_ON_TIME_TASK FROM $TABLE_TRACKER_NAME"
+        val cursor = db.rawQuery(query, null)
+        var onTimeTasksCount = 0
+
+        if (cursor.moveToFirst()) {
+            onTimeTasksCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ON_TIME_TASK))
+        }
+
+        cursor.close()
+        db.close()
+        return onTimeTasksCount
+    }
+
 
 }
