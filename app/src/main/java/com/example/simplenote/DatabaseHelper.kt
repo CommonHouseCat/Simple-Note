@@ -101,6 +101,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    // Get all notes for the recycle view
     fun getAllNotes(): List<NoteDC>{
         val noteList = mutableListOf<NoteDC>()
         val db = writableDatabase
@@ -170,6 +171,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
+    // Get all checklists for the recycle view
     fun getAllChecklists(): List<ChecklistDC>{
         val checklistList = mutableListOf<ChecklistDC>()
         val db = writableDatabase
@@ -257,6 +259,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return currentChecklistID
     }
 
+
+    // Get all checklist items for the recycle view
     fun getAllChecklistsItem(currentChecklistID: Int): List<ChecklistItemDC>{
         val checklistItemList = mutableListOf<ChecklistItemDC>()
         val db = writableDatabase
@@ -340,6 +344,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    // Get all reminder for the recycle view
     fun getAllReminder(): List<ReminderDC>{
         val reminderList = mutableListOf<ReminderDC>()
         val db = writableDatabase
@@ -393,6 +398,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    // Update the state of the switch (ON or OFF)
     fun updateReminderState(reminderID: Int, isActivated: Boolean){
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -405,6 +411,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // This portion is for the Progress Tracker ----------------------------------------------------------------------------------------------------------------------------
+
+    // Increment the selected task by 1
     fun rateTask(taskType: String) {
         val db = writableDatabase
         val selection = "1" // Dummy selection since I want to update all rows
@@ -412,6 +420,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    // Reset all columns to 0
     fun deleteProgress() {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -424,6 +433,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+
+    // Get value from the late task column
     fun getLateTasks(): Int {
         val db = readableDatabase
         val query = "SELECT $COLUMN_LATE_TASK FROM $TABLE_TRACKER_NAME"
@@ -439,6 +450,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return lateTasksCount
     }
 
+    // Get value from the unfinished task column
     fun getUnfinishedTasks(): Int {
         val db = readableDatabase
         val query = "SELECT $COLUMN_UNFINISHED_TASK FROM $TABLE_TRACKER_NAME"
@@ -454,6 +466,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return unfinishedTasksCount
     }
 
+
+    // Get value from the on time task column
     fun getOnTimeTasks(): Int {
         val db = readableDatabase
         val query = "SELECT $COLUMN_ON_TIME_TASK FROM $TABLE_TRACKER_NAME"
@@ -468,6 +482,4 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return onTimeTasksCount
     }
-
-
 }

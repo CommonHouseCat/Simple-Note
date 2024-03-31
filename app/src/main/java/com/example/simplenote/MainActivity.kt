@@ -73,11 +73,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, ProgressTrackerActivity::class.java))
                     true
                 }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingActivity::class.java))
-                    true
-                }
-
                 else -> false
             }
         }
@@ -93,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    // The plus icon on the toobar
+    // The + icon on the toolbar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true

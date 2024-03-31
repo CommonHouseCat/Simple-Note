@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
@@ -18,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
             <CheckBox
                 android:id="@+id/checkbox"
@@ -42,7 +44,8 @@
                 android:textStyle="bold"
                 android:maxLines="3"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="23dp"/>
+                android:layout_marginEnd="20dp"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/deleteChecklistItemButton"

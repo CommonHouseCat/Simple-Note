@@ -68,10 +68,6 @@ class ProgressTrackerActivity : AppCompatActivity() {
                     startActivity(Intent(this, ProgressTrackerActivity::class.java))
                     true
                 }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingActivity::class.java))
-                    true
-                }
 
                 else -> false
             }

@@ -95,7 +95,9 @@
                 android:id="@+id/rateNewTaskButton"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="@string/rateNewTaskButton" />
+                android:text="@string/rateNewTaskButton"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/orange"/>
 
 
             <Button
@@ -103,7 +105,9 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/deleteAllProgressButton" />
+                android:text="@string/deleteAllProgressButton"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/orange"/>
         </LinearLayout>
 
 

@@ -29,6 +29,7 @@ class ChecklistActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
+        // The + Button behaviour
         binding.toolbar.setOnMenuItemClickListener{menuItem ->
             when(menuItem.itemId){
                 R.id.add_note -> {
@@ -77,11 +78,6 @@ class ChecklistActivity : AppCompatActivity() {
                     startActivity(Intent(this, ProgressTrackerActivity::class.java))
                     true
                 }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingActivity::class.java))
-                    true
-                }
-
                 else -> false
             }
         }
@@ -98,6 +94,7 @@ class ChecklistActivity : AppCompatActivity() {
 
 
     }
+    // Inflate the + Button
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true

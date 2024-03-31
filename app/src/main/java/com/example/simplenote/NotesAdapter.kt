@@ -2,7 +2,6 @@ package com.example.simplenote
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,15 +33,6 @@ class NotesAdapter(private var notes: List<NoteDC>, context: Context) : Recycler
         holder.titleTextView.text = note.title
         holder.contentTextView.text = note.content
 
-        // Truncate title to 4 letters followed by an ellipsis
-        val truncatedTitle = if (note.title.length > 24){
-            note.title.substring(0, minOf(23,note.title.length)) + "..."
-        } else {
-            note.title
-        }
-
-        holder.titleTextView.text = truncatedTitle
-
         holder.updateButton.setOnClickListener{
             val intent = Intent(holder.itemView.context, UpdateNoteActivity::class.java).apply{
                 putExtra("note_id", note.id)
@@ -59,7 +49,6 @@ class NotesAdapter(private var notes: List<NoteDC>, context: Context) : Recycler
 
     fun refreshData(newNotes: List<NoteDC>){
         notes = newNotes
-//        Log.d("TAG", "Refresh Data")
         notifyDataSetChanged()
     }
 }

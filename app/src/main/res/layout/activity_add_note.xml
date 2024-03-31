@@ -19,7 +19,9 @@
         android:fontFamily="@font/poppins"
         android:text="@string/Edit_note"
         android:textColor="@color/orange"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        tools:ignore="RelativeOverlap"
+        android:layout_marginEnd="20dp"/>
 
     <ImageView
         android:id="@+id/saveButton"

@@ -119,8 +119,10 @@
         android:backgroundTint="@color/orange"
         android:hint="@string/reminderName"
         android:importantForAutofill="no"
-        android:inputType="text"
-        android:maxLines="1"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:minLines="1"
+        android:maxLines="3"
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
