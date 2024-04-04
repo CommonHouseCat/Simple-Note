@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
 class RemindersAdapter(private var reminders: List<ReminderDC>, private val context: Context) : RecyclerView.Adapter<RemindersAdapter.ReminderViewHolder>() {
 
     private val db: DatabaseHelper = DatabaseHelper(context)
@@ -185,6 +186,4 @@ class RemindersAdapter(private var reminders: List<ReminderDC>, private val cont
         )
         datePickerDialog.show()
     }
-
-
 }

@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.add_note -> {
                     startActivity(Intent(this, AddNoteActivity::class.java))
-                    true // Return true to indicate that the event has been consumed
+                    true
                 }
-                else -> false // Return false for other menu items
+                else -> false
             }
         }
 
@@ -58,19 +58,31 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId){
                 R.id.nav_note -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    if (!isCurrentActivity(MainActivity::class.java)) {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_checklist -> {
-                    startActivity(Intent(this, ChecklistActivity::class.java))
+                    if (!isCurrentActivity(ChecklistActivity::class.java)) {
+                        startActivity(Intent(this, ChecklistActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_reminder -> {
-                    startActivity(Intent(this, ReminderActivity::class.java))
+                    if (!isCurrentActivity(ReminderActivity::class.java)) {
+                        startActivity(Intent(this, ReminderActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_progress_tracker -> {
-                    startActivity(Intent(this, ProgressTrackerActivity::class.java))
+                    if (!isCurrentActivity(ProgressTrackerActivity::class.java)) {
+                        startActivity(Intent(this, ProgressTrackerActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 else -> false
@@ -82,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 if(drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }else{
-                    onBackPressedDispatcher.onBackPressed()
+                    finish()
                 }
             }
         })
@@ -97,5 +109,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         notesAdapter.refreshData(db.getAllNotes())
+    }
+
+    // Get current activity
+    private fun isCurrentActivity(activityClass: Class<*>): Boolean {
+        return activityClass == this::class.java
     }
 }

@@ -63,19 +63,31 @@ class ChecklistActivity : AppCompatActivity() {
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId){
                 R.id.nav_note -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    if (!isCurrentActivity(MainActivity::class.java)) {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_checklist -> {
-                    startActivity(Intent(this, ChecklistActivity::class.java))
+                    if (!isCurrentActivity(ChecklistActivity::class.java)) {
+                        startActivity(Intent(this, ChecklistActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_reminder -> {
-                    startActivity(Intent(this, ReminderActivity::class.java))
+                    if (!isCurrentActivity(ReminderActivity::class.java)) {
+                        startActivity(Intent(this, ReminderActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.nav_progress_tracker -> {
-                    startActivity(Intent(this, ProgressTrackerActivity::class.java))
+                    if (!isCurrentActivity(ProgressTrackerActivity::class.java)) {
+                        startActivity(Intent(this, ProgressTrackerActivity::class.java))
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 else -> false
@@ -87,7 +99,7 @@ class ChecklistActivity : AppCompatActivity() {
                 if(drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }else{
-                    onBackPressedDispatcher.onBackPressed()
+                    finish()
                 }
             }
         })
@@ -124,5 +136,9 @@ class ChecklistActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun isCurrentActivity(activityClass: Class<*>): Boolean {
+        return activityClass == this::class.java
     }
 }

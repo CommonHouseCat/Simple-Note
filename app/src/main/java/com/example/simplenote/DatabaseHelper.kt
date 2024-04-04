@@ -45,6 +45,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_LATE_TASK = "lateTasks"
         private const val COLUMN_UNFINISHED_TASK = "unfinishedTasks"
         private const val COLUMN_ON_TIME_TASK = "onTimeTasks"
+
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -409,6 +410,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.update(TABLE_REMINDER_NAME, values, whereClause, whereArgs)
         db.close()
     }
+
+
+    // This part manages notification channel
+    // Inside DatabaseHelper or any appropriate place
+
 
     // This portion is for the Progress Tracker ----------------------------------------------------------------------------------------------------------------------------
 
