@@ -85,11 +85,13 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
         // Update appearance of content text based on checkbox state
         if (checklistItem.isChecked) {
             // Cross out text and grey out text if checkbox is checked
-            holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.checklistItemContentTextView.paintFlags = holder
+                .checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             holder.checklistItemContentTextView.setTextColor(Color.GRAY)
         } else {
             // Remove strike-through and restore the color if checkbox is unchecked
-            holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.checklistItemContentTextView.paintFlags = holder
+                .checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             holder.checklistItemContentTextView.setTextColor(ContextCompat.getColor(context, R.color.orange))
         }
 
@@ -103,11 +105,13 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
             // Update appearance of content text based on checkbox state
             if (checklistItem.isChecked) {
                 // Cross out text and grey out text if checkbox is checked
-                holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                holder.checklistItemContentTextView.paintFlags = holder
+                    .checklistItemContentTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 holder.checklistItemContentTextView.setTextColor(Color.GRAY)
             } else {
                 // Remove strike-through and restore the color if checkbox is unchecked
-                holder.checklistItemContentTextView.paintFlags = holder.checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.checklistItemContentTextView.paintFlags = holder
+                    .checklistItemContentTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 holder.checklistItemContentTextView.setTextColor(ContextCompat.getColor(context, R.color.orange))
             }
 
@@ -115,9 +119,6 @@ class ChecklistItemAdapter(private var checklistItems: List<ChecklistItemDC>, pr
             val itemContent = checklistItem.itemContent
             val itemId = db.getItemIdByContent(itemContent)
             db.updateChecklistItemState(itemId, checklistItem.isChecked)
-
-            // Notify adapter that data has changed
-            //refreshData(db.getAllChecklistsItem(checklistItem.checklistIDfk))
         }
 
         // The delete button

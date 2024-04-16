@@ -253,11 +253,11 @@
         @SuppressLint("ObsoleteSdkInt")
         private fun scheduleNotification(reminder: ReminderDC) {
             // Create a unique requestCode for each PendingIntent based on the reminder ID
-            val requestCode = reminder.reminderID
+            val requestCode = reminder.reminderID + 1000 // the +1000 is new
 
             val notificationIntent = Intent(this, ReminderBroadcastReceiver::class.java).apply {
                 action = "SHOW_NOTIFICATION"
-                
+                putExtra("reminder_id", reminder.reminderID)
                 putExtra("reminder_name", reminder.reminderName)
             }
             val pendingIntent = PendingIntent.getBroadcast(
@@ -265,6 +265,8 @@
             )
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            // Schedule the alarm at the exact time specified for the reminder (This is new please remove if causes error)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (alarmManager.canScheduleExactAlarms()) {

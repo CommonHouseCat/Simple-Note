@@ -23,7 +23,6 @@ class UpdateChecklistActivity : AppCompatActivity() {
 
         db = DatabaseHelper(this)
 
-        // Update Checklist Button
         checklistId = intent.getIntExtra("checklistID", -1)
         if(checklistId == -1){
             finish()

@@ -30,12 +30,14 @@ class ProgressTrackerActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         db =  DatabaseHelper(this)
-        drawerLayout = binding.drawerLayout
-        pieChart = binding.pieChart
 
+
+        drawerLayout = binding.drawerLayout
+
+        pieChart = binding.pieChart
         val layoutParams = pieChart.layoutParams
-        layoutParams.width = 700 // Set the desired width in pixels
-        layoutParams.height = 700 // Set the desired height in pixels
+        layoutParams.width = 700
+        layoutParams.height = 700
         pieChart.layoutParams = layoutParams
 
         val toggle = ActionBarDrawerToggle(this, drawerLayout, binding.toolbar, R.string.open_nav, R.string.close_nav)

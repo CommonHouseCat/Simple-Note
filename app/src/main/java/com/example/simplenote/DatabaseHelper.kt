@@ -411,13 +411,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
-
-    // This part manages notification channel
-    // Inside DatabaseHelper or any appropriate place
-
-
     // This portion is for the Progress Tracker ----------------------------------------------------------------------------------------------------------------------------
-
     // Increment the selected task by 1
     fun rateTask(taskType: String) {
         val db = writableDatabase
