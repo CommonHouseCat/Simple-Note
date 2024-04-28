@@ -62,7 +62,7 @@ class UpdateChecklistActivity : AppCompatActivity() {
         checklistItemAdapter.refreshData(db.getAllChecklistsItem(currentChecklistID))
     }
 
-    // Working with the Dialog view for adding new Checklist Item
+    // The Dialog view for adding new Checklist Item
     private fun showCreateChecklistItemDialog(title: String){
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_checklist_item, null)
         val editTextChecklistItem = dialogView.findViewById<EditText>(R.id.dialogAddChecklistItemContent)

@@ -40,29 +40,5 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-
-//        val intents = Intent(context,  ProgressTrackerActivity::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        }
-//        val pendingIntent: PendingIntent = PendingIntent
-//            .getActivity(context, 0, intents, PendingIntent.FLAG_IMMUTABLE)
-//
-//        if (intent.action == "SHOW_NOTIFICATION") {
-//            val reminderName = intent.getStringExtra("reminder_name")
-//            // Generate a unique notification ID based on the reminder name
-//            val notificationId = reminderName.hashCode()
-//
-//
-//
-//            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_notification)
-//                .setContentTitle("Reminder")
-//                .setContentText(reminderName)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setContentIntent(pendingIntent)
-//                .build()
-//            notificationManager.notify(notificationId, builder)
-//        }
     }
 }
