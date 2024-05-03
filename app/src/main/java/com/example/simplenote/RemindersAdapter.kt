@@ -1,5 +1,6 @@
 package com.example.simplenote
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -143,6 +144,7 @@ class RemindersAdapter(private var reminders: List<ReminderDC>, private val cont
         }
 
     }
+
 
     fun refreshData(newReminders: List<ReminderDC>){
         reminders = newReminders
