@@ -137,7 +137,6 @@ class ReminderActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         reminderAdapter.refreshData(db.getAllReminder())
-        rescheduleNotifications()
     }
 
     private fun showDialogCreateReminderPopup(){
@@ -175,7 +174,9 @@ class ReminderActivity : AppCompatActivity() {
             db.insertReminder(reminder)
             Toast.makeText(this, "Reminder Saved", Toast.LENGTH_SHORT).show()
             onResume()
-            scheduleNotification(reminder)
+            if(reminder.isActivated){
+                scheduleNotification(reminder)
+            }
             dialog.dismiss()
 
         }
@@ -244,8 +245,8 @@ class ReminderActivity : AppCompatActivity() {
             ).apply {
                 description = "Channel for displaying reminders"
             }
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -253,57 +254,28 @@ class ReminderActivity : AppCompatActivity() {
     // Schedule Notifications in add and update
     @SuppressLint("ObsoleteSdkInt")
     private fun scheduleNotification(reminder: ReminderDC) {
-            // Create a unique requestCode for each PendingIntent based on the reminder ID
-            val requestCode = reminder.reminderID + 1000
+        if(!reminder.isActivated) return
 
-            val notificationIntent = Intent(this, ReminderBroadcastReceiver::class.java).apply {
-                action = "SHOW_NOTIFICATION"
-                putExtra("reminder_id", reminder.reminderID)
-                putExtra("reminder_name", reminder.reminderName)
-            }
-            val pendingIntent = PendingIntent.getBroadcast(
-                this, requestCode, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
-            )
-
-            // Schedule the alarm at the exact time specified for the reminder
-            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (alarmManager.canScheduleExactAlarms()) {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
-                }
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
-            }
-    }
-
-    private fun rescheduleNotifications() {
-        val reminders = db.getAllReminder()
-        val currentTimeMillis = System.currentTimeMillis()
-
-        for (reminder in reminders) {
-            val reminderTimeMillis = reminder.time.timeInMillis
-            if (reminderTimeMillis >= currentTimeMillis) {
-                // The reminder's time is in the future, schedule the notification
-                scheduleNotification(reminder)
-            } else {
-                // The reminder's time has passed, so remove the existing notification if needed
-                cancelNotification(reminder)
-            }
-        }
-    }
-
-    private fun cancelNotification(reminder: ReminderDC) {
-        val requestCode = reminder.reminderID + 1000
-        val notificationIntent = Intent(this, ReminderBroadcastReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this, requestCode, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
-        )
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
+
+        val notificationIntent = Intent(this, ReminderBroadcastReceiver::class.java).apply {
+            action = "SHOW_NOTIFICATION"
+            putExtra("reminder_id", reminder.reminderID)
+            putExtra("reminder_name", reminder.reminderName)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, reminder.reminderID, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+        )
+
+        // Schedule the alarm at the exact time specified for the reminder
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (alarmManager.canScheduleExactAlarms()) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
+            } else alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
+        } else alarmManager.set(AlarmManager.RTC_WAKEUP, reminder.time.timeInMillis, pendingIntent)
+
+        db.updateReminderState(reminder.reminderID, false)
+        onResume()
     }
 
     private fun isCurrentActivity(activityClass: Class<*>): Boolean {

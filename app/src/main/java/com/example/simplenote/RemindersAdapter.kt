@@ -125,7 +125,7 @@ class RemindersAdapter(private var reminders: List<ReminderDC>, private val cont
             holder.dateTextView.setTextColor(Color.GRAY)
         }
 
-        holder.reminderSwitch.isChecked = reminder.isActivated
+//        holder.reminderSwitch.isChecked = reminder.isActivated
 
         holder.reminderSwitch.setOnCheckedChangeListener { _, isChecked ->
             reminder.isActivated = isChecked
@@ -141,6 +141,7 @@ class RemindersAdapter(private var reminders: List<ReminderDC>, private val cont
             }
 
             db.updateReminderState(reminder.reminderID, isChecked)
+            refreshData(db.getAllReminder())
         }
 
     }
